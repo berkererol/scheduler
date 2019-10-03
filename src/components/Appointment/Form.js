@@ -42,7 +42,7 @@ export default function Form(props) {
             placeholder="Enter Student Name"
             onChange={event => setName(event.target.value)}
           />
-\        </form>
+        </form>
         <InterviewerList
           interviewers={interviewers}
           value={interviewer}
