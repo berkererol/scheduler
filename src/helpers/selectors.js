@@ -10,21 +10,34 @@ export const getAppointmentsForDay = (state, day) => {
   if (appointmentIds.length === 0) {
     return appointment;
   } else {
-    appointmentIds.forEach(item => {appointment.push(state.appointments[item])})
+    appointmentIds.forEach(item => { appointment.push(state.appointments[item]) })
     return appointment;
   }
 }
 
 
-export function  getInterview(state, interview) {
+export function getInterview(state, interview) {
   if (!interview) {
-      return null;
+    return null;
   } else {
-      const student = interview.student;
-      const interviewer = state.interviewers[interview.interviewer];
-      const interviewObj = { student, interviewer };
-      return interviewObj;
-}
+    const student = interview.student;
+    const interviewer = state.interviewers[interview.interviewer]; //Finds matching interviewer object within interviewers array inside state.
+    const interviewObj = { student, interviewer};
+    return interviewObj;
+  }
 }
 
+//getInterviewersForDay fetches interviewers for the specific day
+export const getInterviewersForDay = (state, day) => {
+  const interviewers = []; // define the interviewers array containing IDs
 
+  const interviewerIds = state.days 
+    .filter(item => item.name === day) // to select the specified day's object
+    .map(item => item.interviewers) // to make a copy of the interviewers array inside day's object
+    .reduce((total, value) => total.concat(value), []); // flatten the returned nested array from map
+  
+  interviewerIds.forEach(id => {
+    interviewers.push(state.interviewers[id]) // push interviewer objects, which contain id,name,avatar of the interviewer to our created interviewers array
+  });
+  return interviewers;  
+}
