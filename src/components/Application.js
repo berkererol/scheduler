@@ -20,6 +20,41 @@ export default function Application(props) {
   const interviewers = getInterviewersForDay(state, state.day); // array with interviewer objects { id, name, avatar }
   const appointments = getAppointmentsForDay(state, state.day); // array with appointment objects { id, time, interview : student, interviewer}
 
+  const bookInterview = function (id, interview) {
+    const appointment = { ...state.appointments[id], interview: { ...interview } };
+    // console.log(appointment);
+    const appointments = { ...state.appointments, [id]: appointment };
+    // console.log(appointments);
+    setState({ ...state, appointments });
+    // console.log(`id = ${id}, interview = ${{...interview}}`);
+    return axios.put(`/api/appointments/${id}`, { interview });
+
+  }
+
+
+  const deleteInterview = function (id) {
+    return axios.delete(`/api/appointments/${id}`)
+    .then(() => {
+      const appointment = {
+        ...state.appointments[id],
+        interview: null
+      };
+      const appointments = {
+        ...state.appointments,
+        [id]: appointment
+      };
+      setState({
+        ...state,
+        appointments
+      });
+    })
+    .catch((err) => {
+      throw new Error(err.message)
+    })
+  }
+
+
+  //Create daily schedule containing appointment components to be shown on the page
   const dailySchedule = appointments.map(appointment => {
 
     const interview = getInterview(state, appointment.interview); // returns interview obj within each appointment obj
@@ -27,17 +62,18 @@ export default function Application(props) {
     return (
       <Appointment
         key={appointment.id}
-        id={appointment.id}
-        time={appointment.time}
+        {...appointment}
+        // id={appointment.id}
+        // time={appointment.time}
         interview={interview}
         interviewers={interviewers}
+        bookInterview={bookInterview}
+        deleteInterview={deleteInterview}
       />
     );
   });
 
   const setDay = day => setState({ ...state, day });
-
-
 
   useEffect(() => {
     Promise.all([
@@ -65,7 +101,12 @@ export default function Application(props) {
         />
         <hr className="sidebar__separator sidebar--centered" />
         <nav className="sidebar__menu">
-          <DayList days={state.days} day={state.day} setDay={setDay} appointments={state.appointments} />
+          <DayList
+            days={state.days}
+            day={state.day}
+            setDay={day => setDay(day)}
+            appointments={state.appointments}
+          />
         </nav>
         <img
           className="sidebar__lhl sidebar--centered"
