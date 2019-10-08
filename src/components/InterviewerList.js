@@ -2,6 +2,13 @@ import React from 'react';
 import InterviewerListItem from 'components/InterviewerListItem';
 import 'components/InterviewerList.scss';
 
+//Validating the type of props with PropType library
+import PropTypes from 'prop-types';
+
+InterviewerList.propTypes = {
+  value: PropTypes.number,
+  onChange: PropTypes.func.isRequired
+};
 
 
 export default function InterviewerList(props) {
