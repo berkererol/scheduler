@@ -30,14 +30,10 @@ export default function Appointment(props) {
   const save = function (name, interviewer) {
     const interview = { student: name, interviewer };
     return interview;
-    // transition(SAVING);
-    // const interview = { student: name, interviewer };
-    // bookInterview(props.id, interview);
-    // transition(SHOW);
   }
 
   return (
-    <article className="appointment">
+    <article className="appointment" data-testid="appointment">
       <Header time={props.time} />
       {mode === CONFIRM && (
         <Confirm
