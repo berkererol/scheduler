@@ -83,7 +83,7 @@ This allowed to ensure interface identity and consistency throughout the develop
 
 Implemented [cypress](https://www.cypress.io/) to create end to end tests.
 
-!["cypress tests"](scheduler_cypress.png)
+!["cypress tests"](docs/scheduler_cypress.png)
 
 ### Jest Unit Tests
 
